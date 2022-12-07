@@ -16,6 +16,10 @@ router.get('/cart', shopController.getCart);
 
 router.post('/cart', shopController.postCart);
 
+router.delete('/cart/:productId', shopController.deleteProductFromCart)
+
+// router.patch('/cart/:productId', shopController.patchQuantity)
+
 router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 
 router.get('/orders', shopController.getOrders);
