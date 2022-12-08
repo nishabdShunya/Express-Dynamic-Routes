@@ -71,6 +71,7 @@ exports.getCart = async (req, res, next) => {
       res.json(products);
     })
     .catch(err => console.log(err));
+
   /* PAGINATION LOGIC NOT WORKING
   const cartPage = +req.query.cartPage || 1;
   let cartPageProducts = [];
@@ -133,27 +134,20 @@ exports.deleteProductFromCart = (req, res, next) => {
     })
     .catch(err => console.log(err));
 }
-/* 
+
 exports.patchQuantity = (req, res, next) => {
-  const productId = req.params.productId;
-  CartItem.findOne({ where: { productId: productId } })
-    .then(cartItem => {
-      console.log(cartItem);
-      cartItem.quantity = +req.body.quantity;
-      console.log(cartItem);
+  const productId = +req.params.productId;
+  const quantity = +req.body.quantity;
+  CartItem.update(
+    { quantity: quantity },
+    { where: { productId: productId } }
+  )
+    .then(result => {
+      res.json(result);
     })
-  // req.user.getCart()
-  //   .then(cart => {
-  //     return cart.getProducts({ where: { id: productId } })
-  //   })
-  //   .then(products=>{
-  //     const product = products[0];
-  //     product.cartItem.quantity = req.body.quantity;
-  //     console.log(product);
-  //   })
-  //   .catch(err => console.log(err))
+    .catch(err => console.log(err))
 }
- */
+
 exports.postCartDeleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   req.user.getCart()
