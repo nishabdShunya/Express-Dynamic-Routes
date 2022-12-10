@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-const dotenv = require('dotenv');
-dotenv.config();
+// const dotenv = require('dotenv');
+// dotenv.config();
 
 const errorController = require('./controllers/error');
 const sequelize = require('./util/database');
@@ -16,8 +16,6 @@ const Cart = require('./models/cart');
 const CartItem = require('./models/cart-item');
 const Order = require('./models/order');
 const OrderItem = require('./models/order-item');
-
-
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -30,13 +28,14 @@ app.use(bodyParser.json({ extended: false }));
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use((req, res, next) => {
-    User.findOne({ where: { id: 1 } })
-        .then(user => {
-            req.user = user;
-            next();
-        })
-        .catch(err => console.log(err));
+app.use(async (req, res, next) => {
+    try {
+        const user = await User.findOne({ where: { id: 1 } })
+        req.user = user;
+        next();
+    } catch (err) {
+        console.log(err);
+    }
 });
 
 app.use('/admin', adminRoutes);
